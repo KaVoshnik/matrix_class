@@ -1,81 +1,6 @@
 #include "matrix.h"
 
 class matrix{
-private:
-    int rows; int cols;
-    vector<vector<int>> arr;
-
-    vector<vector<int>> getMinor(vector<vector<int>> matrix_, int rows, int cols){
-        int n = matrix_.size();
-        vector<vector<int>> out_minor(n - 1, vector<int>(n - 1));
-
-        if(n == 1) return matrix_;
-
-        for(int i = 0, p = 0; i < n; i++){
-            if(i == rows) continue;
-            for(int j = 0, q = 0; j < n; j++){
-                if(j == cols) continue;
-                out_minor[p][q] = matrix_[i][j];
-                q++;
-            }
-            p++;
-        }
-        //cout << "minor\n";
-        return out_minor;
-    }
-
-    double determinant(vector<vector<int>>& matrix_){
-        int n = matrix_.size();
-        vector<int> test = matrix_[0];
-        int b = test.size();
-        int det = 0;
-
-        if(n != b){
-            cout << "Not square! n = " << n << " b = " << b << "\n";
-            return 0;
-        } 
-
-        if(n == 0){
-            return 0;
-        }
-        else if(n == 1){
-            //cout << "deter\n";
-            return matrix_[0][0];
-        }
-        else if(n == 2){
-            //cout << "deter\n";
-            return (matrix_[0][0] * matrix_[1][1]) - (matrix_[0][1] * matrix_[1][0]); //косяк тут
-        }
-        else{
-            for(int i = 0; i < n; i++){
-                for (int j = 0; j < n; j++){
-                    vector<vector<int>> minor = getMinor(matrix_, i, j);
-                    int sign = j % 2 ? 1 : -1;
-                    det += sign * matrix_[i][j] * determinant(minor);
-                //cout << sign << ":s " << matrix_[i][j] << ":m " << determinant(minor) << ":d" << det << ":det\n";
-                }
-            }
-            
-            //cout << "deter\n";
-            //cout << det << ":det" << "\n";
-            return det;
-        }
-    }
-
-    vector<vector<int>> getAlgAppend(vector<vector<int>> mat_){
-        int n = mat_.size();
-        vector<vector<int>> cofactors(n, vector<int>(n));
-
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < n; j++){
-                vector<vector<int>> minors = getMinor(mat_, i, j);
-                int sign = (i + j) % 2 == 0 ? 1: -1;
-                cofactors[j][i] = int(sign * determinant(minors));
-            }
-        }
-        //cout << "alg\n";
-        return cofactors;
-    }
 
 public:
     matrix(){} //создание
@@ -228,6 +153,82 @@ public:
 
         return out;
         
+    }
+
+private:
+    int rows; int cols;
+    vector<vector<int>> arr;
+
+    vector<vector<int>> getMinor(vector<vector<int>> matrix_, int rows, int cols){
+        int n = matrix_.size();
+        vector<vector<int>> out_minor(n - 1, vector<int>(n - 1));
+
+        if(n == 1) return matrix_;
+
+        for(int i = 0, p = 0; i < n; i++){
+            if(i == rows) continue;
+            for(int j = 0, q = 0; j < n; j++){
+                if(j == cols) continue;
+                out_minor[p][q] = matrix_[i][j];
+                q++;
+            }
+            p++;
+        }
+        //cout << "minor\n";
+        return out_minor;
+    }
+
+    double determinant(vector<vector<int>>& matrix_){
+        int n = matrix_.size();
+        vector<int> test = matrix_[0];
+        int b = test.size();
+        int det = 0;
+
+        if(n != b){
+            cout << "Not square! n = " << n << " b = " << b << "\n";
+            return 0;
+        } 
+
+        if(n == 0){
+            return 0;
+        }
+        else if(n == 1){
+            //cout << "deter\n";
+            return matrix_[0][0];
+        }
+        else if(n == 2){
+            //cout << "deter\n";
+            return (matrix_[0][0] * matrix_[1][1]) - (matrix_[0][1] * matrix_[1][0]); //косяк тут
+        }
+        else{
+            for(int i = 0; i < n; i++){
+                for (int j = 0; j < n; j++){
+                    vector<vector<int>> minor = getMinor(matrix_, i, j);
+                    int sign = j % 2 ? 1 : -1;
+                    det += sign * matrix_[i][j] * determinant(minor);
+                //cout << sign << ":s " << matrix_[i][j] << ":m " << determinant(minor) << ":d" << det << ":det\n";
+                }
+            }
+            
+            //cout << "deter\n";
+            //cout << det << ":det" << "\n";
+            return det;
+        }
+    }
+
+    vector<vector<int>> getAlgAppend(vector<vector<int>> mat_){
+        int n = mat_.size();
+        vector<vector<int>> cofactors(n, vector<int>(n));
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                vector<vector<int>> minors = getMinor(mat_, i, j);
+                int sign = (i + j) % 2 == 0 ? 1: -1;
+                cofactors[j][i] = int(sign * determinant(minors));
+            }
+        }
+        //cout << "alg\n";
+        return cofactors;
     }
 
 
