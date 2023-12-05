@@ -1,9 +1,4 @@
-#include <iostream>
-#include <vector>
-
-using std::vector;
-using std::cout;
-using std::cin;
+#include "matrix.h"
 
 class matrix{
 private:
